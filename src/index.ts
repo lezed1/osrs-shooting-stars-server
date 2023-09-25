@@ -1,4 +1,6 @@
 import express, { type Request, type Response } from "express";
+import "reflect-metadata";
+
 const app = express();
 const { PORT = 3000 } = process.env;
 

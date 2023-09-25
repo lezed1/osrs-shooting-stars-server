@@ -12,11 +12,13 @@
     "lint": "eslint . && prettier --check ."
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
     "@types/express": "^4.17.18",
-    "@types/node": "^20.6.3",
+    "@types/node": "^20.6.5",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "concurrently": "^8.2.1",
     "eslint": "^8.50.0",
