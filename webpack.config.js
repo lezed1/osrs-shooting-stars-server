@@ -27,4 +27,5 @@ module.exports = {
   },
   externals: [nodeExternals()],
   watch: NODE_ENV === "development",
+  devtool: "inline-source-map",
 };

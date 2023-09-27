@@ -1,10 +1,13 @@
-import { Entity, Column, PrimaryColumn, BaseEntity } from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity, Timestamp } from "typeorm";
 import { WorldMode } from "../enum/WorldMode";
 
 @Entity("star_observation")
 export default class StarObservation extends BaseEntity {
-  @PrimaryColumn()
+  @Column()
   world!: number;
+
+  @PrimaryColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  recorded_at!: Timestamp;
 
   @Column({
     type: "enum",
