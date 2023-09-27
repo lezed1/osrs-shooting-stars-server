@@ -10,7 +10,7 @@ import {
 import { WorldMode } from "../enum/WorldMode";
 import { Location } from "./Location";
 
-export class StarReport {
+export class StarObservationReport {
   @IsInt()
   @Min(1)
   @Max(1000)

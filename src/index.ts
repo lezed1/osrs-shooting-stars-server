@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import { AppDataSource } from "./services/DBService";
 import StarObservation from "./orm/StarObservation";
 import { validate } from "class-validator";
-import { StarReport } from "./types/StarReport";
+import { StarObservationReport } from "./types/StarObservationReport";
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -20,7 +20,7 @@ app.get("/", (req: Request, res: Response) => {
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post("/shooting_stars", async (req, res) => {
-  const starReport = new StarReport();
+  const starReport = new StarObservationReport();
   starReport.world = req.body.world;
   starReport.mode = req.body.mode;
   starReport.location = req.body.location;
