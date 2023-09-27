@@ -38,20 +38,20 @@ export default class StarObservation extends BaseEntity {
   })
   hp?: number;
 
-  static async insertStarReport(
-    starReport: StarObservationReport,
+  static async insertStarObservationReport(
+    starObservationReport: StarObservationReport,
   ): Promise<void> {
     await AppDataSource.createQueryBuilder()
       .insert()
       .into(StarObservation)
       .values({
-        world: starReport.world,
-        mode: starReport.mode,
-        location_x: starReport.location?.x,
-        location_y: starReport.location?.y,
-        location_plane: starReport.location?.plane,
-        tier: starReport.tier,
-        hp: starReport.hp,
+        world: starObservationReport.world,
+        mode: starObservationReport.mode,
+        location_x: starObservationReport.location?.x,
+        location_y: starObservationReport.location?.y,
+        location_plane: starObservationReport.location?.plane,
+        tier: starObservationReport.tier,
+        hp: starObservationReport.hp,
       })
       .updateEntity(false)
       .execute();

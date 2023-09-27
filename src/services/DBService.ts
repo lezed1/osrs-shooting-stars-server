@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import StarObservation from "../orm/StarObservation";
+import TelescopeObservation from "../orm/TelescopeObservation";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
@@ -10,7 +11,7 @@ export const AppDataSource = new DataSource({
   database: process.env.TYPEORM_DATABASE,
   synchronize: Boolean(process.env.TYPEORM_SYNCHRONIZE),
   logging: Boolean(process.env.TYPEORM_LOGGING),
-  entities: [StarObservation],
+  entities: [StarObservation, TelescopeObservation],
   // entities,
   // migrations,
 });

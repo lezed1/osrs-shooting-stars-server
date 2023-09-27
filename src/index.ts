@@ -6,6 +6,8 @@ import { AppDataSource } from "./services/DBService";
 import StarObservation from "./orm/StarObservation";
 import { validate } from "class-validator";
 import { StarObservationReport } from "./types/StarObservationReport";
+import { TelescopeObservationReport } from "./types/TelescopeObservationReport";
+import TelescopeObservation from "./orm/TelescopeObservation";
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -20,20 +22,38 @@ app.get("/", (req: Request, res: Response) => {
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post("/shooting_stars", async (req, res) => {
-  const starReport = new StarObservationReport();
-  starReport.world = req.body.world;
-  starReport.mode = req.body.mode;
-  starReport.location = req.body.location;
-  starReport.tier = req.body.tier;
-  starReport.hp = req.body.hp;
-  starReport.exact = req.body.exact;
-  const errors = await validate(starReport);
-  if (errors.length > 0) {
-    res.json({ error: "Invalid request", errors });
+  if ("location" in req.body) {
+    const starObservationReport = new StarObservationReport();
+    starObservationReport.world = req.body.world;
+    starObservationReport.mode = req.body.mode;
+    starObservationReport.location = req.body.location;
+    starObservationReport.tier = req.body.tier;
+    starObservationReport.hp = req.body.hp;
+    starObservationReport.exact = req.body.exact;
+    const errors = await validate(starObservationReport);
+    if (errors.length > 0) {
+      res.json({ error: "Invalid request", errors });
+    }
+    console.log(starObservationReport);
+    await StarObservation.insertStarObservationReport(starObservationReport);
+    res.json({ success: true });
+  } else if ("message" in req.body) {
+    const telescopeObservationReport = new TelescopeObservationReport();
+    telescopeObservationReport.world = req.body.world;
+    telescopeObservationReport.mode = req.body.mode;
+    telescopeObservationReport.message = req.body.message;
+    const errors = await validate(telescopeObservationReport);
+    if (errors.length > 0) {
+      res.json({ error: "Invalid request", errors });
+    }
+    console.log(telescopeObservationReport);
+    await TelescopeObservation.insertTelescopeObservationReport(
+      telescopeObservationReport,
+    );
+    res.json({ success: true });
+  } else {
+    res.json({ error: "Invalid request" });
   }
-  console.log(starReport);
-  await StarObservation.insertStarReport(starReport);
-  res.json({ success: true });
 });
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
