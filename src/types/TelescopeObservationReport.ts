@@ -11,6 +11,6 @@ export class TelescopeObservationReport {
   mode!: WorldMode;
 
   @IsString()
-  @MaxLength(100)
+  @MaxLength(250)
   message!: string;
 }
