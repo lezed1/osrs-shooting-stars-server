@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: hacky-prod-stuff/Dockerfile
+    restart: always
+    ports:
+      - "3333:3333"
+    expose:
+      - "3333"
+    links:
+      - db
+    env_file:
+      - .env
+    environment:
+      - PORT=3333
+      - TYPEORM_HOST=db
+      - TYPEORM_DATABASE=shooting-stars
+      - TYPEORM_PORT=3306
+      - TYPEORM_SYNCHRONIZE=true
+      - TYPEORM_LOGGING=true
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: shooting-stars
+    volumes:
+      - mysql-datavolume-prod:/var/lib/mysql
+volumes:
+  mysql-datavolume-prod:

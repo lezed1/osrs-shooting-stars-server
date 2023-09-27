@@ -15,7 +15,6 @@ services:
       - db
     command: "npm run dev"
     environment:
-      - TYPEORM_CONNECTION=mysql
       - TYPEORM_HOST=db
       - TYPEORM_USERNAME=root
       - TYPEORM_PASSWORD=root-password
@@ -23,8 +22,6 @@ services:
       - TYPEORM_PORT=3306
       - TYPEORM_SYNCHRONIZE=true
       - TYPEORM_LOGGING=true
-      - TYPEORM_ENTITIES=src/orm/*.ts
-      - TYPEORM_MIGRATIONS=src/migration/*.ts=value
   db:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
