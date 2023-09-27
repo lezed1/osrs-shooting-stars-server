@@ -8,7 +8,9 @@
 	"extensions": {
 		"recommendations": [
 			"esbenp.prettier-vscode",
-			"rvest.vs-code-prettier-eslint"
+			"rvest.vs-code-prettier-eslint",
+			"dbaeumer.vscode-eslint",
+			"ms-azuretools.vscode-docker"
 		]
 	}
 }
