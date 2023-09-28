@@ -68,12 +68,12 @@ const server = app.listen(PORT, async () => {
   await AppDataSource.initialize();
   // await AppDataSource.synchronize();
 
-  await StarObservation.insertStarObservationReport({
-    world: 0,
-    mode: WorldMode.STANDARD,
-    location: { x: 1, y: 2, plane: 3 },
-    tier: 0,
-  });
+  // await StarObservation.insertStarObservationReport({
+  //   world: 0,
+  //   mode: WorldMode.STANDARD,
+  //   location: { x: 1, y: 2, plane: 3 },
+  //   tier: 0,
+  // });
 
   console.log("server started at http://localhost:" + PORT);
 });
