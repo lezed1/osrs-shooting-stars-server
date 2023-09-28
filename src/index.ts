@@ -1,4 +1,9 @@
-import express, { type Request, type Response } from "express";
+import express, {
+  type ErrorRequestHandler,
+  type Request,
+  type Response,
+} from "express";
+import cors from "cors";
 import "dotenv/config";
 import "reflect-metadata";
 import bodyParser from "body-parser";
@@ -9,11 +14,17 @@ import { StarObservationReport } from "./types/StarObservationReport";
 import { TelescopeObservationReport } from "./types/TelescopeObservationReport";
 import TelescopeObservation from "./orm/TelescopeObservation";
 import * as StarService from "./services/StarService";
-import { WorldMode } from "./enum/WorldMode";
 
 const app = express();
 const { PORT = 3000 } = process.env;
 
+const corsOptions = {
+  maxAge: 86400,
+  methods: "GET",
+};
+
+// Middleware
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 app.get("/", (req: Request, res: Response) => {
@@ -62,6 +73,16 @@ app.post("/shooting_stars", async (req, res) => {
 app.get("/shooting_stars", async (req, res) => {
   res.json(await StarService.whereAreTheStars());
 });
+
+// Error handling
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.error(err);
+  res
+    .status(500)
+    .json({ error: "There was an internal error. Please try again later." });
+  next();
+};
+app.use(errorHandler);
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 const server = app.listen(PORT, async () => {
