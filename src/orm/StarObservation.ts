@@ -4,6 +4,7 @@ import {
   BaseEntity,
   Timestamp,
   PrimaryGeneratedColumn,
+  Index,
 } from "typeorm";
 import { WorldMode } from "../enum/WorldMode";
 import { Min, IsInt, Max } from "class-validator";
@@ -15,6 +16,7 @@ export default class StarObservation extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Index()
   @Column({
     type: "timestamp",
     precision: 6,
