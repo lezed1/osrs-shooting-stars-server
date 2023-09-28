@@ -8,6 +8,7 @@ import { validate } from "class-validator";
 import { StarObservationReport } from "./types/StarObservationReport";
 import { TelescopeObservationReport } from "./types/TelescopeObservationReport";
 import TelescopeObservation from "./orm/TelescopeObservation";
+import * as StarService from "./services/StarService";
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -54,6 +55,11 @@ app.post("/shooting_stars", async (req, res) => {
   } else {
     res.json({ error: "Invalid request" });
   }
+});
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+app.get("/shooting_stars", async (req, res) => {
+  res.json(await StarService.whereAreTheStars());
 });
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
