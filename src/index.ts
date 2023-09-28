@@ -9,6 +9,7 @@ import { StarObservationReport } from "./types/StarObservationReport";
 import { TelescopeObservationReport } from "./types/TelescopeObservationReport";
 import TelescopeObservation from "./orm/TelescopeObservation";
 import * as StarService from "./services/StarService";
+import { WorldMode } from "./enum/WorldMode";
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -66,6 +67,14 @@ app.get("/shooting_stars", async (req, res) => {
 const server = app.listen(PORT, async () => {
   await AppDataSource.initialize();
   // await AppDataSource.synchronize();
+
+  await StarObservation.insertStarObservationReport({
+    world: 0,
+    mode: WorldMode.STANDARD,
+    location: { x: 1, y: 2, plane: 3 },
+    tier: 0,
+  });
+
   console.log("server started at http://localhost:" + PORT);
 });
 
