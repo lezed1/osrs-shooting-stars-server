@@ -58,6 +58,18 @@ export default class StarObservation extends BaseEntity {
   })
   exact?: boolean;
 
+  @Column({
+    generatedType: "VIRTUAL",
+    asExpression: `
+      CASE
+        WHEN exact = FALSE OR exact IS NULL THEN hp * 2
+        WHEN exact = TRUE THEN 100 - hp
+        ELSE -1
+      END
+    `,
+  })
+  percent_remaining!: number;
+
   static async insertStarObservationReport(
     starObservationReport: StarObservationReport,
   ): Promise<void> {

@@ -16,7 +16,7 @@ export async function whereAreTheStars(): Promise<any> {
     .addSelect("star_observation.location_plane", "location_plane")
     .addSelect("MAX(star_observation.recorded_at)", "lastest_recorded_at")
     .addSelect("star_observation.tier", "tier")
-    .addSelect("AVG(star_observation.hp)", "hp")
+    .addSelect("AVG(star_observation.percent_remaining)", "percent_remaining")
     .addSelect("COUNT(*)", "count")
     .from(StarObservation, "star_observation")
     .where("star_observation.recorded_at > NOW() - 60")
@@ -44,7 +44,7 @@ export async function whereAreTheStars(): Promise<any> {
       },
       timestamp: observation.lastest_recorded_at,
       tier: observation.tier,
-      percent_remaining: Number(observation.hp),
+      percent_remaining: Number(observation.percent_remaining),
     }))
     .values()
     .value();
