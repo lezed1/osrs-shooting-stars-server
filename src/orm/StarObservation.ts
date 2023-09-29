@@ -87,7 +87,6 @@ export default class StarObservation extends BaseEntity {
         hp: starObservationReport.hp,
         exact: starObservationReport.exact,
       })
-      .updateEntity(false)
       .execute();
   }
 }
