@@ -57,34 +57,21 @@ export async function whereAreTheStars(): Promise<any> {
           percent_remaining,
         }),
       );
-      const lastest_recorded_at = _.chain(observationsMostCommonLocation)
+      const timestamp = _.chain(observationsMostCommonLocation)
         .map("recorded_at")
         .max()
         .value();
       const { world, tier, location } = observationsMostCommonLocation[0];
       return {
-        lastest_recorded_at,
         world,
-        tier,
         location,
+        timestamp,
+        tier,
         percent_remaining,
         infoForDebugging,
       };
     })
     .values()
-    // .join()
-    // .values()
-    // .mapValues((observation) => ({
-    //   world: observation.world,
-    //   location: {
-    //     x: observation.location_x,
-    //     y: observation.location_y,
-    //     plane: observation.location_plane,
-    //   },
-    //   timestamp: observation.lastest_recorded_at,
-    //   tier: observation.tier,
-    //   percent_remaining: Number(observation.percent_remaining),
-    // }))
     .value();
   const result = {
     generated_at: new Date().toISOString(),
