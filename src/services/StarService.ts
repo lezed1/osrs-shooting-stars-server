@@ -50,13 +50,13 @@ export async function whereAreTheStars(): Promise<any> {
         .filter((x) => !_.isNull(x))
         .mean()
         .value();
-      const infoForDebugging = _.map(
-        observationsMostCommonLocation,
-        ({ recorded_at, percent_remaining }) => ({
-          recorded_at,
-          percent_remaining,
-        }),
-      );
+      // const infoForDebugging = _.map(
+      //   observationsMostCommonLocation,
+      //   ({ recorded_at, percent_remaining }) => ({
+      //     recorded_at,
+      //     percent_remaining,
+      //   }),
+      // );
       const timestamp = _.chain(observationsMostCommonLocation)
         .map("recorded_at")
         .max()
@@ -68,7 +68,7 @@ export async function whereAreTheStars(): Promise<any> {
         timestamp,
         tier,
         percent_remaining,
-        infoForDebugging,
+        // infoForDebugging,
       };
     })
     .values()

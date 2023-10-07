@@ -14,6 +14,8 @@ import { StarObservationReport } from "./types/StarObservationReport";
 import { TelescopeObservationReport } from "./types/TelescopeObservationReport";
 import TelescopeObservation from "./orm/TelescopeObservation";
 import * as StarService from "./services/StarService";
+import { CannonObservationReport } from "./types/CannonObservationReport";
+import CannonObservation from "./orm/CannonObservation";
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -46,6 +48,7 @@ app.post("/shooting_stars", async (req, res) => {
     const errors = await validate(starObservationReport);
     if (errors.length > 0) {
       res.json({ error: "Invalid request", errors });
+      return;
     }
     console.log(starObservationReport);
     await StarObservation.insertStarObservationReport(starObservationReport);
@@ -58,10 +61,27 @@ app.post("/shooting_stars", async (req, res) => {
     const errors = await validate(telescopeObservationReport);
     if (errors.length > 0) {
       res.json({ error: "Invalid request", errors });
+      return;
     }
     console.log(telescopeObservationReport);
     await TelescopeObservation.insertTelescopeObservationReport(
       telescopeObservationReport,
+    );
+    res.json({ success: true });
+  } else if ("varbit2180" in req.body) {
+    const cannonObservationReport = new CannonObservationReport();
+    cannonObservationReport.world = req.body.world;
+    cannonObservationReport.mode = req.body.mode;
+    cannonObservationReport.varbit2180 = req.body.varbit2180;
+    cannonObservationReport.time = new Date(req.body.time);
+    const errors = await validate(cannonObservationReport);
+    if (errors.length > 0) {
+      res.json({ error: "Invalid request", errors });
+      return;
+    }
+    console.log(cannonObservationReport);
+    await CannonObservation.insertCannonObservationReport(
+      cannonObservationReport,
     );
     res.json({ success: true });
   } else {
