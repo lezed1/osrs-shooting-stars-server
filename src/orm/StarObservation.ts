@@ -2,7 +2,6 @@ import {
   Entity,
   Column,
   BaseEntity,
-  Timestamp,
   PrimaryGeneratedColumn,
   Index,
 } from "typeorm";
@@ -22,7 +21,7 @@ export default class StarObservation extends BaseEntity {
     precision: 6,
     default: () => "CURRENT_TIMESTAMP(6)",
   })
-  recorded_at!: Timestamp;
+  recorded_at!: Date;
 
   @Column()
   @IsInt()

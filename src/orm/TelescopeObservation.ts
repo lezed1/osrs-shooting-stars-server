@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, BaseEntity, Timestamp } from "typeorm";
+import { Entity, Column, PrimaryColumn, BaseEntity } from "typeorm";
 import { WorldMode } from "../enum/WorldMode";
 import { Min, IsInt, Max } from "class-validator";
 import { AppDataSource } from "../services/DBService";
@@ -12,8 +12,12 @@ export default class TelescopeObservation extends BaseEntity {
   @Max(1000)
   world!: number;
 
-  @PrimaryColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  recorded_at!: Timestamp;
+  @PrimaryColumn({
+    type: "timestamp",
+    precision: 6,
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
+  recorded_at!: Date;
 
   @Column({
     type: "enum",
