@@ -12,7 +12,7 @@ export class CannonObservationReport {
 
   @IsInt()
   @IsPositive()
-  varbit2180!: number;
+  cannonVarbit!: number;
 
   @IsDate()
   time!: Date;

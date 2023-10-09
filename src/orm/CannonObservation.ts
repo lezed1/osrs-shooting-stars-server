@@ -22,7 +22,7 @@ export default class CannonObservation extends BaseEntity {
   mode!: WorldMode;
 
   @Column()
-  varbit2180!: number;
+  cannonVarbit!: number;
 
   @Column()
   time_from_client!: Date;
@@ -36,7 +36,7 @@ export default class CannonObservation extends BaseEntity {
       .values({
         world: cannonObservationReport.world,
         mode: cannonObservationReport.mode,
-        varbit2180: cannonObservationReport.varbit2180,
+        cannonVarbit: cannonObservationReport.cannonVarbit,
         time_from_client: cannonObservationReport.time,
       })
       .updateEntity(false)

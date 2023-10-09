@@ -76,12 +76,17 @@ app.post("/shooting_stars", async (req, res) => {
       telescopeObservationReport,
     );
     res.json({ success: true });
-  } else if ("varbit2180" in req.body) {
+  } else if ("cannonVarbit" in req.body) {
     const cannonObservationReport = new CannonObservationReport();
     cannonObservationReport.world = req.body.world;
     cannonObservationReport.mode = req.body.mode;
-    cannonObservationReport.varbit2180 = req.body.varbit2180;
-    cannonObservationReport.time = new Date(req.body.time);
+    cannonObservationReport.cannonVarbit = req.body.cannonVarbit;
+    const time = new Date(req.body.time);
+    if (time < new Date("1980-01-01")) {
+      cannonObservationReport.time = new Date(req.body.time * 1000);
+    } else {
+      cannonObservationReport.time = time;
+    }
     const errors = await validate(cannonObservationReport);
     if (errors.length > 0) {
       res.json({ error: "Invalid request", errors });
