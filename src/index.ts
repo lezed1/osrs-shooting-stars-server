@@ -35,8 +35,13 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
+function log_with_json(message: string, obj: any) {
+  console.log(message, JSON.stringify(obj, null, 2));
+}
+
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post("/shooting_stars", async (req, res) => {
+  log_with_json("Got POST to /shooting_stars. Body:", req.body);
   if ("location" in req.body) {
     const starObservationReport = new StarObservationReport();
     starObservationReport.world = req.body.world;
@@ -50,7 +55,7 @@ app.post("/shooting_stars", async (req, res) => {
       res.json({ error: "Invalid request", errors });
       return;
     }
-    console.log(starObservationReport);
+    log_with_json("Parsed starObservationReport:", starObservationReport);
     await StarObservation.insertStarObservationReport(starObservationReport);
     res.json({ success: true });
   } else if ("message" in req.body) {
@@ -63,7 +68,10 @@ app.post("/shooting_stars", async (req, res) => {
       res.json({ error: "Invalid request", errors });
       return;
     }
-    console.log(telescopeObservationReport);
+    log_with_json(
+      "Parsed telescopeObservationReport:",
+      telescopeObservationReport,
+    );
     await TelescopeObservation.insertTelescopeObservationReport(
       telescopeObservationReport,
     );
@@ -79,12 +87,13 @@ app.post("/shooting_stars", async (req, res) => {
       res.json({ error: "Invalid request", errors });
       return;
     }
-    console.log(cannonObservationReport);
+    log_with_json("Parsed cannonObservationReport:", cannonObservationReport);
     await CannonObservation.insertCannonObservationReport(
       cannonObservationReport,
     );
     res.json({ success: true });
   } else {
+    console.log("Unknown request");
     res.json({ error: "Invalid request" });
   }
 });
