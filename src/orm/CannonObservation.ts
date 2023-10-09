@@ -28,7 +28,10 @@ export default class CannonObservation extends BaseEntity {
   @Column()
   cannonVarbit!: number;
 
-  @Column()
+  @Column({
+    type: "timestamp",
+    precision: 6,
+  })
   time_from_client!: Date;
 
   static async insertCannonObservationReport(
