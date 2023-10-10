@@ -1,10 +1,10 @@
-name: Build server
+name: Build everything
 on:
   push:
 
 jobs:
-  regenerate-data:
-    name: Build server
+  build-typescript:
+    name: Build typescript
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,3 +18,18 @@ jobs:
         with:
           name: server-bundle
           path: dist/bundle.js
+
+  # build-dev-docker:
+  #   name: Build dev Docker
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: docker compose build
+
+  # build-hacky-prod-docker:
+  #   name: Build hacky prod Docker
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - working-directory: ./hacky-prod-stuff
+  #       run: docker compose build

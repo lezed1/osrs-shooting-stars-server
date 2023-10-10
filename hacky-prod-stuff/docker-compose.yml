@@ -21,6 +21,20 @@ services:
       - TYPEORM_PORT=3306
       - TYPEORM_SYNCHRONIZE=true
       - TYPEORM_LOGGING=true
+  python:
+    build: ../python
+    scale: 0
+    volumes:
+      - "./out:/home/python/app/out"
+    links:
+      - db
+    command: "python3 src/generate_stars.py"
+    env_file:
+      - .env
+    environment:
+      - TYPEORM_HOST=db
+      - TYPEORM_DATABASE=shooting-stars
+      - TYPEORM_PORT=3306
   db:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
