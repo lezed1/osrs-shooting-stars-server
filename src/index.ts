@@ -115,7 +115,7 @@ app.get("/shooting_stars/better", async (req, res) => {
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.get("/shooting_stars/headers", async (req, res) => {
-  res.json(req.headers);
+  res.json({ for: req.headers["x-forwarded-for"], headers: req.headers });
 });
 
 // Error handling
