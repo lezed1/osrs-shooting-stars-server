@@ -25,7 +25,7 @@ services:
     build: ../python
     scale: 0
     volumes:
-      - "./out:/home/python/app/out"
+      - "/tmp/out:/home/python/app/out"
     links:
       - db
     command: "python3 src/generate_stars.py"
