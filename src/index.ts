@@ -41,7 +41,11 @@ function logWithJson(message: string, obj: any): void {
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.post("/shooting_stars", async (req, res) => {
-  logWithJson("Got POST to /shooting_stars. Body:", req.body);
+  const ip = req.header("x-forwarded-for");
+  logWithJson(
+    `Got POST to /shooting_stars from IP ${ip ?? ""}. Body:`,
+    req.body,
+  );
   if ("location" in req.body) {
     const starObservationReport = new StarObservationReport();
     starObservationReport.world = req.body.world;
@@ -56,7 +60,10 @@ app.post("/shooting_stars", async (req, res) => {
       return;
     }
     logWithJson("Parsed starObservationReport:", starObservationReport);
-    await StarObservation.insertStarObservationReport(starObservationReport);
+    await StarObservation.insertStarObservationReport(
+      starObservationReport,
+      ip,
+    );
     res.json({ success: true });
   } else if ("message" in req.body) {
     const telescopeObservationReport = new TelescopeObservationReport();
@@ -74,6 +81,7 @@ app.post("/shooting_stars", async (req, res) => {
     );
     await TelescopeObservation.insertTelescopeObservationReport(
       telescopeObservationReport,
+      ip,
     );
     res.json({ success: true });
   } else if ("cannonVarbit" in req.body) {
@@ -95,6 +103,7 @@ app.post("/shooting_stars", async (req, res) => {
     logWithJson("Parsed cannonObservationReport:", cannonObservationReport);
     await CannonObservation.insertCannonObservationReport(
       cannonObservationReport,
+      ip,
     );
     res.json({ success: true });
   } else {

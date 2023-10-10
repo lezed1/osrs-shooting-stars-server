@@ -19,6 +19,9 @@ export default class TelescopeObservation extends BaseEntity {
   })
   recorded_at!: Date;
 
+  @Column({ nullable: true })
+  reportedBy?: string;
+
   @Column({
     type: "enum",
     enum: WorldMode,
@@ -30,6 +33,7 @@ export default class TelescopeObservation extends BaseEntity {
 
   static async insertTelescopeObservationReport(
     telescopeObservationReport: TelescopeObservationReport,
+    reportedBy: string | undefined,
   ): Promise<void> {
     await AppDataSource.createQueryBuilder()
       .insert()
@@ -38,6 +42,7 @@ export default class TelescopeObservation extends BaseEntity {
         world: telescopeObservationReport.world,
         mode: telescopeObservationReport.mode,
         message: telescopeObservationReport.message,
+        reportedBy,
       })
       .updateEntity(false)
       .execute();

@@ -19,6 +19,9 @@ export default class CannonObservation extends BaseEntity {
   })
   recorded_at!: Date;
 
+  @Column({ nullable: true })
+  reportedBy?: string;
+
   @Column({
     type: "enum",
     enum: WorldMode,
@@ -36,6 +39,7 @@ export default class CannonObservation extends BaseEntity {
 
   static async insertCannonObservationReport(
     cannonObservationReport: CannonObservationReport,
+    reportedBy: string | undefined,
   ): Promise<void> {
     await AppDataSource.createQueryBuilder()
       .insert()
@@ -45,6 +49,7 @@ export default class CannonObservation extends BaseEntity {
         mode: cannonObservationReport.mode,
         cannonVarbit: cannonObservationReport.cannonVarbit,
         time_from_client: cannonObservationReport.time,
+        reportedBy,
       })
       .updateEntity(false)
       .execute();

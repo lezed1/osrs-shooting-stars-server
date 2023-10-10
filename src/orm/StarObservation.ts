@@ -23,6 +23,9 @@ export default class StarObservation extends BaseEntity {
   })
   recorded_at!: Date;
 
+  @Column({ nullable: true })
+  reportedBy?: string;
+
   @Column()
   @IsInt()
   @Min(1)
@@ -72,6 +75,7 @@ export default class StarObservation extends BaseEntity {
 
   static async insertStarObservationReport(
     starObservationReport: StarObservationReport,
+    reportedBy: string | undefined,
   ): Promise<void> {
     await AppDataSource.createQueryBuilder()
       .insert()
@@ -85,6 +89,7 @@ export default class StarObservation extends BaseEntity {
         tier: starObservationReport.tier,
         hp: starObservationReport.hp,
         exact: starObservationReport.exact,
+        reportedBy,
       })
       .execute();
   }
