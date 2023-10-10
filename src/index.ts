@@ -108,6 +108,11 @@ app.get("/shooting_stars", async (req, res) => {
   res.json(await StarService.whereAreTheStars());
 });
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+app.get("/shooting_stars/better", async (req, res) => {
+  res.json(await StarService.betterWhereAreTheStars());
+});
+
 // Error handling
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);
