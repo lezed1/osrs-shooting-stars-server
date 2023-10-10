@@ -19,7 +19,7 @@ export async function whereAreTheStars(): Promise<any> {
     .addSelect("star_observation.tier", "tier")
     .addSelect("star_observation.percent_remaining", "percent_remaining")
     .from(StarObservation, "star_observation")
-    .where("star_observation.recorded_at > NOW() - 120")
+    .where("star_observation.recorded_at > NOW() - INTERVAL 2 MINUTE")
     .andWhere("tier > 0")
     .andWhere("star_observation.mode = :mode", { mode: WorldMode.STANDARD })
     .orderBy("world", "ASC")
