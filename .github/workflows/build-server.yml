@@ -19,12 +19,12 @@ jobs:
           name: server-bundle
           path: dist/bundle.js
 
-  # build-dev-docker:
-  #   name: Build dev Docker
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - run: docker compose build
+  build-dev-docker:
+    name: Build dev Docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker compose build
 
   # build-hacky-prod-docker:
   #   name: Build hacky prod Docker
