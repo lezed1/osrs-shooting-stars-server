@@ -26,10 +26,10 @@ jobs:
       - uses: actions/checkout@v3
       - run: docker compose build
 
-  # build-hacky-prod-docker:
-  #   name: Build hacky prod Docker
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - working-directory: ./hacky-prod-stuff
-  #       run: docker compose build
+  build-hacky-prod-docker:
+    name: Build hacky prod Docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - working-directory: ./hacky-prod-stuff
+        run: docker compose build
