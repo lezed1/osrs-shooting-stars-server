@@ -1,133 +1,56 @@
 from collections import defaultdict
 import datetime
+import itertools
 import json
 import os
-import re
 import mysql.connector
 from mysql.connector import MySQLConnection
-from attrs import define
+import numpy as np
+
+from cannon_observation import CannonObservation
+from star_observation import StarObservation
+from telescope_observation import TelescopeObservation
 
 ## Interesting code!
 
 
-@define
-class TelescopeObservation:
-    world: int
-    recorded_at: datetime.datetime
-    reportedBy: str
-    mode: str
-    message: str
-
-    @staticmethod
-    def get(connection: MySQLConnection, query):
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-
-            for row in cursor:
-                row = dict(zip(cursor.column_names, row))
-                telescope_observation = TelescopeObservation(**row)
-                yield telescope_observation
-
-    @define
-    class Parsed:
-        region: str
-        recorded_at: datetime.datetime
-        start: datetime.datetime
-        start_offset: datetime.timedelta
-        end: datetime.datetime
-        end_offset: datetime.timedelta
-
-    def parse_message(self):
-        if (
-            self.message
-            == "You look through the telescope but you don't see anything interesting."
-        ):
-            return None
-
-        result = re.fullmatch(
-            "You see a shooting star! The star looks like it will land (in|on) (?P<region>.*) in the next (?P<start_time>.*) to (?P<end_time>.*).",
-            self.message,
+def world_reset(connection: MySQLConnection):
+    world_starts = defaultdict(list)
+    for cannon_observation in CannonObservation.get(connection):
+        world_start = cannon_observation.recorded_at - datetime.timedelta(
+            seconds=cannon_observation.cannonVarbit * 0.6
         )
-        if result:
-            result = result.groupdict()
+        world_starts[cannon_observation.world].append(world_start)
 
-            def parse_time_offset(string: str):
-                string = (
-                    string.removesuffix("s")
-                    .removesuffix(" minute")
-                    .replace("hours", "hour")
-                )
-                if string.isdigit():
-                    return datetime.timedelta(minutes=int(string))
-                else:
-                    hours, minutes = string.split("hour")
-                    return datetime.timedelta(hours=int(hours), minutes=int(minutes))
-
-            start_offset = parse_time_offset(result["start_time"])
-            end_offset = parse_time_offset(result["end_time"])
-            return TelescopeObservation.Parsed(
-                region=result["region"],
-                recorded_at=self.recorded_at,
-                start=self.recorded_at + start_offset,
-                start_offset=start_offset,
-                end=self.recorded_at + end_offset,
-                end_offset=end_offset,
+    grouped = {}
+    for world, starts in sorted(world_starts.items()):
+        clusters = {
+            l[0]: len(l)
+            for l in np.split(
+                starts,
+                np.where(np.diff(starts) > (datetime.timedelta(minutes=10)))[0] + 1,
             )
-        else:
-            raise Exception("failed to parse telescope observation: ", self.message)
+            if len(l) > 25
+        }
+        if not clusters:
+            continue
+        grouped[world] = max(clusters.keys())
 
-
-@define
-class StarObservation:
-    id: int
-    recorded_at: datetime.datetime
-    reportedBy: str
-    world: int
-    mode: str
-    location_x: int
-    location_y: int
-    location_plane: int
-    tier: int
-    hp: int
-    exact: bool
-    percent_remaining: int
-
-    @staticmethod
-    def get(connection: MySQLConnection, query):
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            column_names = cursor.column_names
-
-            for row in cursor:
-                yield StarObservation(**dict(zip(column_names, row)))
+    return grouped
 
 
 def telescope_observations(connection: MySQLConnection):
     counts = defaultdict(int)
-    for telescope_observation in TelescopeObservation.get(
-        connection, "SELECT * FROM telescope_observation"
-    ):
+    for telescope_observation in TelescopeObservation.get(connection):
         # telescope_observation.parse_message()
-        print(telescope_observation.parse_message())
+        # print(telescope_observation.parse_message())
         pass
 
 
 def star_counts_per_world(connection: MySQLConnection):
     counts = defaultdict(int)
 
-    for star_observation in StarObservation.get(
-        connection,
-        """
-            SELECT 
-            * 
-            FROM 
-            star_observation 
-            WHERE 
-            recorded_at > NOW() - INTERVAL 4 HOUR 
-            ORDER BY 
-            recorded_at DESC
-        """,
-    ):
+    for star_observation in StarObservation.get(connection):
         counts[star_observation.world] += 1
 
     return dict(counts)
@@ -135,6 +58,7 @@ def star_counts_per_world(connection: MySQLConnection):
 
 def generate_star_info(connection: MySQLConnection):
     telescope_observations(connection)
+    world_reset(connection)
     counts = star_counts_per_world(connection)
 
     return {
